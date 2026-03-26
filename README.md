@@ -34,9 +34,18 @@ Figure 1: Game screenshot (placeholder - simple canvas with rectangles).
 
 ## Design
 
+### Architecture
+
+The game follows the Model-View-Controller (MVC) architecture:
+
+- **Model (model.py):** Contains all game physics, logic, and state management. Responsible for plant/zombie objects, movement calculations, and collision detection.
+- **View (view.py):** Handles all visual rendering using Tkinter. Responsible for drawing game elements based on model state.
+- **Controller (controller.py):** Handles user input (mouse clicks) and translates them into model actions.
+- **Main (main.py):** Entry point containing the game loop and orchestration of all components.
+
 ### Pseudocode
 
-#### Model Module
+#### Model Module (Physics & Game Logic)
 
 ```
 Class Plant:
@@ -67,10 +76,10 @@ Class GameModel:
                     If collides(zombie, plant):
                         Set zombie.active to False
     Method collides(zombie, plant):
-        Return True if rectangles overlap (standard AABB collision)
+        Return True if rectangles overlap (AABB collision)
 ```
 
-#### View Module
+#### View Module (Display & Rendering)
 
 ```
 Class GameView:
@@ -86,35 +95,32 @@ Class GameView:
                 Draw red rectangle
 ```
 
-#### Controller Module
+#### Controller Module (Input Handling)
 
 ```
 Class GameController:
-    Initialize:
-        Create Tkinter root
-        Create GameModel instance
-        Create GameView instance with root and model
-        Bind canvas left-click to place_plant method
-        Add initial zombies in random lanes
-        Start game_loop
+    Initialize with model
+    Store reference to model
     Method place_plant(event):
-        Calculate lane from event.y // lane_height
-        If valid lane, add plant at event.x - 25, lane
-    Method game_loop():
-        Call model.update()
-        Call view.draw()
-        Schedule next call after 50ms
-    Method run():
-        Start Tkinter mainloop
+        Calculate lane from event.y // model.lane_height
+        If valid lane, add plant to model at event.x - 25, lane
 ```
 
-#### Main Module
+#### Main Module (Game Loop & Orchestration)
 
 ```
-Import GameController from controller
-If __name__ == "__main__":
-    Create GameController instance
-    Call run()
+Create Tkinter root window
+Create GameModel instance
+Create GameView instance with root and model
+Create GameController instance with model
+Bind canvas left-click to controller.place_plant
+Add initial zombies in random lanes to model
+Define game_loop():
+    Call model.update()
+    Call view.draw()
+    Schedule next update after 50ms
+Call game_loop()
+Start Tkinter mainloop()
 ```
 
 ## Lessons Learned
