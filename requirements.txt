@@ -1,0 +1,4 @@
+# Requirements for Plants vs Zombies Phase 1
+# tkinter is part of the Python standard library on most installs.
+# If using a virtual environment, ensure Python version 3.8+.
+python>=3.8
