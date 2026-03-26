@@ -21,7 +21,7 @@ This project implements a basic version of Plants vs. Zombies using the Model-Vi
 Key features:
 - Plants are represented as green rectangles and are placed at the mouse click position in specific lanes.
 - Zombies are represented as red rectangles that move leftward at a constant speed within their lanes.
-- No collision detection in this phase; zombies pass through plants.
+- Collision detection: When a zombie collides with a plant in the same lane, the zombie stops moving.
 - No shooting, attacking, or sun collection mechanics.
 - Graphics rendered using Tkinter with simple shapes.
 
@@ -45,9 +45,9 @@ Class Plant:
 
 Class Zombie:
     Initialize with x, y, lane
-    Set width, height to 50, speed to 1
+    Set width, height to 50, speed to 1, active to True
     Method move():
-        Decrement x by speed
+        If active, decrement x by speed
 
 Class GameModel:
     Initialize:
@@ -63,6 +63,11 @@ Class GameModel:
         For each lane:
             For each zombie in lane:
                 Call move()
+                For each plant in lane:
+                    If collides(zombie, plant):
+                        Set zombie.active to False
+    Method collides(zombie, plant):
+        Return True if rectangles overlap (standard AABB collision)
 ```
 
 #### View Module

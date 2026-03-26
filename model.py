@@ -5,9 +5,11 @@ class Plant:
 class Zombie:
     def __init__(self, x, y, lane):
         self.x, self.y, self.lane, self.width, self.height, self.speed = x, y, lane, 50, 50, 1
+        self.active = True
 
     def move(self):
-        self.x -= self.speed
+        if self.active:
+            self.x -= self.speed
 
 class GameModel:
     def __init__(self):
@@ -25,3 +27,10 @@ class GameModel:
         for lane in range(self.lanes):
             for z in self.zombies[lane]:
                 z.move()
+                for p in self.plants[lane]:
+                    if self.collides(z, p):
+                        z.active = False
+
+    def collides(self, z, p):
+        return (z.x < p.x + p.width and z.x + z.width > p.x and
+                z.y < p.y + p.height and z.y + z.height > p.y)
