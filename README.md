@@ -25,10 +25,10 @@ Key features:
 - No shooting, attacking, or sun collection mechanics.
 - Graphics rendered using Tkinter with simple shapes.
 
-The game separates concerns into three components within `main.py`:
-- **Model:** Handles game logic, physics, and state (positions, movement).
-- **View:** Manages the display and rendering of game elements.
-- **Controller:** Processes user input and coordinates the game loop.
+The game separates concerns into three modules:
+- **Model (model.py):** Handles game logic, physics, and state (positions, movement).
+- **View (view.py):** Manages the display and rendering of game elements.
+- **Controller (controller.py):** Processes user input and coordinates the game loop.
 
 Figure 1: Game screenshot (placeholder - simple canvas with rectangles).
 
@@ -36,9 +36,7 @@ Figure 1: Game screenshot (placeholder - simple canvas with rectangles).
 
 ### Pseudocode
 
-All classes are implemented in `main.py`.
-
-#### Model Classes
+#### Model Module
 
 ```
 Class Plant:
@@ -67,7 +65,7 @@ Class GameModel:
                 Call move()
 ```
 
-#### View Class
+#### View Module
 
 ```
 Class GameView:
@@ -83,7 +81,7 @@ Class GameView:
                 Draw red rectangle
 ```
 
-#### Controller Class
+#### Controller Module
 
 ```
 Class GameController:
@@ -105,9 +103,10 @@ Class GameController:
         Start Tkinter mainloop
 ```
 
-#### Main Execution
+#### Main Module
 
 ```
+Import GameController from controller
 If __name__ == "__main__":
     Create GameController instance
     Call run()

@@ -1,42 +1,27 @@
 class Plant:
     def __init__(self, x, y, lane):
-        self.x = x
-        self.y = y
-        self.lane = lane
-        self.width = 50
-        self.height = 50
+        self.x, self.y, self.lane, self.width, self.height = x, y, lane, 50, 50
 
 class Zombie:
     def __init__(self, x, y, lane):
-        self.x = x
-        self.y = y
-        self.lane = lane
-        self.width = 50
-        self.height = 50
-        self.speed = 1
+        self.x, self.y, self.lane, self.width, self.height, self.speed = x, y, lane, 50, 50, 1
 
     def move(self):
         self.x -= self.speed
 
 class GameModel:
     def __init__(self):
-        self.lanes = 5
-        self.lane_height = 120  # 600 / 5
-        self.plants = []  # list of lists, one per lane
-        self.zombies = []  # list of lists, one per lane
-        for _ in range(self.lanes):
-            self.plants.append([])
-            self.zombies.append([])
+        self.lanes, self.lane_height = 5, 120
+        self.plants = [[] for _ in range(self.lanes)]
+        self.zombies = [[] for _ in range(self.lanes)]
 
     def add_plant(self, x, lane):
-        plant = Plant(x, lane * self.lane_height + 35, lane)  # center in lane
-        self.plants[lane].append(plant)
+        self.plants[lane].append(Plant(x, lane * self.lane_height + 35, lane))
 
     def add_zombie(self, x, lane):
-        zombie = Zombie(x, lane * self.lane_height + 35, lane)
-        self.zombies[lane].append(zombie)
+        self.zombies[lane].append(Zombie(x, lane * self.lane_height + 35, lane))
 
     def update(self):
         for lane in range(self.lanes):
-            for zombie in self.zombies[lane]:
-                zombie.move()
+            for z in self.zombies[lane]:
+                z.move()
