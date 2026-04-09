@@ -23,7 +23,7 @@ def main():
     
     # Main game loop
     while controller.running:
-        # Handle events
+        # Handle events and controller updates
         controller.handle_events()
         
         # Update game logic
@@ -39,3 +39,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

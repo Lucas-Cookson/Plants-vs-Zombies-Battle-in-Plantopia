@@ -9,14 +9,20 @@ class GameController:
         self.view = view
         self.selected_plant = None
         self.running = True
+        self.click_cooldown = 0  # Prevent rapid clicks
 
     def handle_events(self):
         """Process pygame events."""
+        # Update click cooldown
+        if self.click_cooldown > 0:
+            self.click_cooldown -= 1
+            
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.MOUSEBUTTONDOWN and self.click_cooldown == 0:
                 self._handle_mouse_click(event.pos)
+                self.click_cooldown = 10  # 10 frame cooldown between clicks
 
     def _handle_mouse_click(self, pos):
         """Handle mouse click events."""
@@ -47,5 +53,9 @@ class GameController:
         if 0 <= lane < self.model.lanes:
             # Round to grid
             plant_x = (game_x // 100) * 100 + 25
-            self.model.add_plant(plant_x, lane, self.selected_plant)
+            success = self.model.add_plant(plant_x, lane, self.selected_plant)
+            
+            # Clear selection on successful placement to prevent multiple placements
+            if success:
+                self.selected_plant = None
 

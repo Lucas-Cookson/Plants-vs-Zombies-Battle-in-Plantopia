@@ -19,11 +19,11 @@ class TestZombies(unittest.TestCase):
     
     def test_zombie_speed_regular(self):
         """Test regular zombie speed."""
-        self.assertEqual(self.regular_zombie.speed, 1)
+        self.assertEqual(self.regular_zombie.speed, 0.5)
     
     def test_zombie_speed_fast(self):
         """Test fast zombie speed."""
-        self.assertEqual(self.fast_zombie.speed, 2)
+        self.assertEqual(self.fast_zombie.speed, 1)
     
     def test_zombie_movement(self):
         """Test zombie moves left."""

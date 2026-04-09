@@ -45,7 +45,7 @@ class Zombie:
         self.width = 50
         self.height = 50
         self.zombie_type = zombie_type
-        self.speed = 2 if zombie_type == ZombieType.FAST else 1
+        self.speed = 1 if zombie_type == ZombieType.FAST else 0.5  # Halved speed
         self.max_health = 30 if zombie_type == ZombieType.FAST else 50
         self.health = self.max_health
         self.eating = False
@@ -146,9 +146,9 @@ class GameModel:
         # Level management
         self.current_level = 1
         self.levels = {
-            1: GameLevel(1, sunflower_reward=50, zombie_spawn_rate=0.015, 
+            1: GameLevel(1, sunflower_reward=50, zombie_spawn_rate=0.005, 
                         zombie_types=[ZombieType.REGULAR], max_zombies=10),
-            2: GameLevel(2, sunflower_reward=50, zombie_spawn_rate=0.025, 
+            2: GameLevel(2, sunflower_reward=50, zombie_spawn_rate=0.01, 
                         zombie_types=[ZombieType.REGULAR, ZombieType.FAST], max_zombies=15)
         }
         self.sun = 100  # Starting sun resources
@@ -169,13 +169,16 @@ class GameModel:
         if self.sun < cost:
             return False
         
-        # Prevent overlapping plants in the same cell
-        cell_x = (x // 100) * 100
+        # Prevent overlapping plants in the same cell - check strict grid position
+        grid_x = (x // 100) * 100  # Snap to grid
         for plant in self.plants[lane]:
-            if abs(plant.x - cell_x) < 50:
+            plant_grid_x = (plant.x // 100) * 100
+            if abs(plant_grid_x - grid_x) < 60:  # Strict spacing check
                 return False
         
-        plant = Plant(x, lane * self.lane_height + 35, lane, plant_type)
+        # Snap to grid for consistency
+        snapped_x = grid_x + 25
+        plant = Plant(snapped_x, lane * self.lane_height + 35, lane, plant_type)
         self.plants[lane].append(plant)
         self.sun -= cost
         return True
@@ -184,6 +187,12 @@ class GameModel:
         """Add a zombie to the game."""
         if lane < 0 or lane >= self.lanes:
             return
+        
+        # Check if there's already a zombie too close in this lane (prevent stacking)
+        min_spacing = 80  # Minimum pixel distance between zombies
+        for existing_zombie in self.zombies[lane]:
+            if abs(existing_zombie.x - x) < min_spacing:
+                return  # Too close to existing zombie, don't spawn
         
         level = self.get_current_level()
         if zombie_type is None and level:
