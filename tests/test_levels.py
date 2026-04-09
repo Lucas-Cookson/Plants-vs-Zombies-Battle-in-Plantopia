@@ -45,16 +45,12 @@ class TestLevelProgression(unittest.TestCase):
         self.assertGreater(len(level.zombie_types), 1)
         self.assertIn(ZombieType.FAST, level.zombie_types)
     
-    def test_initial_sun_amount(self):
-        """Test initial sun resources."""
-        self.assertEqual(self.model.sun, 100)
-    
+
     def test_level_reset(self):
         """Test level reset clears game state."""
         # Add some objects
         self.model.add_plant(100, 0, 1)
         self.model.add_zombie(750, 0)
-        self.model.sun = 0
         
         # Reset level
         self.model.level_reset()
@@ -62,7 +58,6 @@ class TestLevelProgression(unittest.TestCase):
         # Check state is cleared
         self.assertEqual(len(self.model.plants[0]), 0)
         self.assertEqual(len(self.model.zombies[0]), 0)
-        self.assertEqual(self.model.sun, 100)
     
     def test_game_not_won_initially(self):
         """Test game is not won at start."""

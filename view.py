@@ -142,8 +142,8 @@ class GameView:
                         (0, 0, self.sidebar_width, self.height - 50))
         
         # Draw plant selection buttons
-        self._draw_button(self.sunflower_button, "Sunflower\n50", 0)
-        self._draw_button(self.walnut_button, "Walnut\n150", 1)
+        self._draw_button(self.sunflower_button, "Sunflower", 0)
+        self._draw_button(self.walnut_button, "Walnut", 1)
 
     def _draw_button(self, rect, text, button_type):
         """Draw a UI button."""
@@ -165,18 +165,13 @@ class GameView:
             f"Level: {self.model.current_level}/2", True, self.TEXT_COLOR)
         self.screen.blit(level_text, (10, self.height - 45))
         
-        # Sun counter
-        sun_text = self.font_medium.render(
-            f"Sun: {self.model.sun}", True, self.TEXT_COLOR)
-        self.screen.blit(sun_text, (10, self.height - 20))
-        
         # Plant/Zombie counts
         plant_count = sum(len(self.model.plants[i]) for i in range(self.model.lanes))
         zombie_count = sum(len(self.model.zombies[i]) for i in range(self.model.lanes))
         
         stats_text = self.font_small.render(
             f"Plants: {plant_count}  |  Zombies: {zombie_count}", True, self.TEXT_COLOR)
-        self.screen.blit(stats_text, (300, self.height - 35))
+        self.screen.blit(stats_text, (10, self.height - 20))
 
     def _draw_victory_screen(self):
         """Draw victory screen overlay."""

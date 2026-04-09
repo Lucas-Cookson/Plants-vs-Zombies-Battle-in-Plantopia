@@ -31,13 +31,13 @@ class TestPlants(unittest.TestCase):
     
     def test_plant_death(self):
         """Test plant dies when health reaches 0."""
-        self.sunflower.take_damage(200)
+        self.sunflower.take_damage(400)
         self.assertFalse(self.sunflower.is_alive())
     
     def test_plant_partial_damage(self):
         """Test plant takes partial damage but survives."""
-        self.sunflower.take_damage(50)
-        self.assertEqual(self.sunflower.health, 50)
+        self.sunflower.take_damage(100)
+        self.assertEqual(self.sunflower.health, 300)
         self.assertTrue(self.sunflower.is_alive())
     
     def test_plant_shoot_cooldown(self):

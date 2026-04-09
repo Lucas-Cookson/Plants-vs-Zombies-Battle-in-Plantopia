@@ -18,7 +18,7 @@ class Plant:
         self.width = 50
         self.height = 50
         self.plant_type = plant_type
-        self.max_health = 100 if plant_type == PlantType.WALNUT else 100
+        self.max_health = 100 if plant_type == PlantType.WALNUT else 400
         self.health = self.max_health
         self.shoot_cooldown = 0
 
@@ -151,7 +151,6 @@ class GameModel:
             2: GameLevel(2, sunflower_reward=50, zombie_spawn_rate=0.01, 
                         zombie_types=[ZombieType.REGULAR, ZombieType.FAST], max_zombies=15)
         }
-        self.sun = 100  # Starting sun resources
         self.game_won = False
         self.game_lost = False
 
@@ -162,11 +161,6 @@ class GameModel:
     def add_plant(self, x, lane, plant_type):
         """Add a plant to the game."""
         if lane < 0 or lane >= self.lanes:
-            return False
-        
-        # Check plant cost
-        cost = 50 if plant_type == PlantType.SUNFLOWER else 150
-        if self.sun < cost:
             return False
         
         # Prevent overlapping plants in the same cell - check strict grid position
@@ -180,7 +174,6 @@ class GameModel:
         snapped_x = grid_x + 25
         plant = Plant(snapped_x, lane * self.lane_height + 35, lane, plant_type)
         self.plants[lane].append(plant)
-        self.sun -= cost
         return True
 
     def add_zombie(self, x, lane, zombie_type=None):
@@ -299,7 +292,6 @@ class GameModel:
         self.plants = [[] for _ in range(self.lanes)]
         self.zombies = [[] for _ in range(self.lanes)]
         self.projectiles = [[] for _ in range(self.lanes)]
-        self.sun = 100
 
     def is_game_over(self):
         """Check if game is over (won or lost)."""
