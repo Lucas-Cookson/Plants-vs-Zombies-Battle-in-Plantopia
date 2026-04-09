@@ -165,7 +165,7 @@ class GameModel:
             return False
         
         # Check plant cost
-        cost = 100 if plant_type == PlantType.SUNFLOWER else 150
+        cost = 50 if plant_type == PlantType.SUNFLOWER else 150
         if self.sun < cost:
             return False
         
