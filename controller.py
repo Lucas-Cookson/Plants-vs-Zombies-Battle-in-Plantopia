@@ -45,7 +45,7 @@ class GameController:
         game_y = y
         
         # Only place plants in the game area
-        if game_x < 0 or game_x >= self.view.game_width or game_y >= self.model.height - 50:
+        if game_x < 0 or game_x >= self.view.game_width or game_y >= self.view.game_area_height:
             return
         
         # Place plant if coordinates are valid

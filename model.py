@@ -134,7 +134,7 @@ class GameModel:
     """Main game model handling all game logic and state."""
     def __init__(self):
         self.lanes = 5
-        self.lane_height = 120
+        self.lane_height = 110  # Reduced from 120 to fit all rows
         self.width = 800
         self.height = 600
         
@@ -153,6 +153,8 @@ class GameModel:
         }
         self.game_won = False
         self.game_lost = False
+        self.level_complete = False
+        self.level_complete_timer = 0
 
     def get_current_level(self):
         """Return the current level object."""
@@ -280,12 +282,21 @@ class GameModel:
         if level and level.zombies_spawned >= level.max_zombies:
             # All zombies spawned, check if all are defeated
             total_zombies = sum(len(self.zombies[i]) for i in range(self.lanes))
-            if total_zombies == 0:
+            if total_zombies == 0 and not self.level_complete:
+                self.level_complete = True
+                self.level_complete_timer = 180  # Show screen for 3 seconds at 60 FPS
+        
+        # Handle level transition after showing completion screen
+        if self.level_complete:
+            self.level_complete_timer -= 1
+            if self.level_complete_timer <= 0:
                 if self.current_level == 1:
                     self.current_level = 2
                     self.level_reset()
+                    self.level_complete = False
                 elif self.current_level == 2:
                     self.game_won = True
+                    self.level_complete = False
 
     def level_reset(self):
         """Reset game state for a new level."""

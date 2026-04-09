@@ -8,6 +8,7 @@ class GameView:
         self.model = model
         self.width = width
         self.height = height
+        self.game_area_height = height - 50  # Reserve 50 pixels for status bar
         
         # Colors
         self.BG_COLOR = (200, 220, 100)
@@ -48,11 +49,11 @@ class GameView:
             pygame.draw.line(self.screen, self.LANE_COLOR, (self.sidebar_width, y), 
                            (self.width, y), 2)
         
-        # Draw game board grid
+        # Draw game board grid (within game area only)
         for i in range(0, self.game_width, 100):
             pygame.draw.line(self.screen, self.LANE_COLOR, 
                            (self.sidebar_width + i, 0), 
-                           (self.sidebar_width + i, self.height - 50), 1)
+                           (self.sidebar_width + i, self.game_area_height), 1)
         
         # Draw all plants
         for lane in range(self.model.lanes):
@@ -76,10 +77,12 @@ class GameView:
         self._draw_status()
         
         # Draw end screen if game is over
-        if self.model.game_won:
-            self._draw_victory_screen()
-        elif self.model.game_lost:
+        if self.model.game_lost:
             self._draw_loss_screen()
+        elif self.model.level_complete:
+            self._draw_level_complete_screen()
+        elif self.model.game_won:
+            self._draw_victory_screen()
         
         pygame.display.flip()
 
@@ -173,6 +176,23 @@ class GameView:
             f"Plants: {plant_count}  |  Zombies: {zombie_count}", True, self.TEXT_COLOR)
         self.screen.blit(stats_text, (10, self.height - 20))
 
+    def _draw_level_complete_screen(self):
+        """Draw level complete screen overlay."""
+        overlay = pygame.Surface((self.width, self.height))
+        overlay.set_alpha(200)
+        overlay.fill((0, 0, 0))
+        self.screen.blit(overlay, (0, 0))
+        
+        title = self.font_large.render(f"Level {self.model.current_level} Complete!", True, (0, 255, 0))
+        
+        if self.model.current_level == 1:
+            message = self.font_medium.render("Get ready for Level 2...", True, (255, 255, 255))
+        else:
+            message = self.font_medium.render("Get ready for the next challenge...", True, (255, 255, 255))
+        
+        self.screen.blit(title, (self.width // 2 - title.get_width() // 2, 200))
+        self.screen.blit(message, (self.width // 2 - message.get_width() // 2, 300))
+
     def _draw_victory_screen(self):
         """Draw victory screen overlay."""
         overlay = pygame.Surface((self.width, self.height))
@@ -180,13 +200,8 @@ class GameView:
         overlay.fill((0, 0, 0))
         self.screen.blit(overlay, (0, 0))
         
-        level = self.model.current_level - 1
-        title = self.font_large.render(f"Level {level} Complete!", True, (0, 255, 0))
-        
-        if self.model.current_level == 2:
-            message = self.font_medium.render("Get ready for Level 2...", True, (255, 255, 255))
-        else:
-            message = self.font_large.render("YOU WON!", True, (0, 255, 0))
+        title = self.font_large.render("YOU WIN!", True, (0, 255, 0))
+        message = self.font_medium.render("Congratulations! You defeat all the zombies!", True, (255, 255, 0))
         
         self.screen.blit(title, (self.width // 2 - title.get_width() // 2, 200))
         self.screen.blit(message, (self.width // 2 - message.get_width() // 2, 300))
