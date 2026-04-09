@@ -115,7 +115,10 @@ class Projectile:
 
 class GameLevel:
     """Represents a game level with difficulty parameters."""
-    def __init__(self, level_num, sunflower_reward=50, zombie_spawn_rate=0.02, 
+    def __init__(self,
+                 level_num,
+                 sunflower_reward=50,
+                 zombie_spawn_rate=0.02, 
                  zombie_types=[ZombieType.REGULAR, ZombieType.FAST], 
                  max_zombies=12):
         self.level_num = level_num

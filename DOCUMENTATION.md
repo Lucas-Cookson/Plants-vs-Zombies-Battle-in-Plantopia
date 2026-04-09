@@ -4,7 +4,7 @@
 
 **Plants vs. Zombies - Phase 2: Battle in Plantopia**
 
-**Team Members:** [Your Names Here]
+**Team Members:** Lucas C, Andrew C, Daniel O
 
 **Project:** Plants vs. Zombies - Phase 2
 
