@@ -3,6 +3,8 @@ import random
 from model import GameModel, ZombieType
 from view import GameView
 from controller import GameController
+from sounds import SoundManager
+from assets_manager import AssetManager
 
 def main():
     """Main game entry point."""
@@ -17,6 +19,8 @@ def main():
     model = GameModel()
     view = GameView(model, SCREEN_WIDTH, SCREEN_HEIGHT)
     controller = GameController(model, view)
+    sound_manager = SoundManager()
+    asset_manager = AssetManager()
     
     # Clock for frame rate control
     clock = pygame.time.Clock()
@@ -39,4 +43,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
