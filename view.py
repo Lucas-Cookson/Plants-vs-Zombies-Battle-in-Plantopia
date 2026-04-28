@@ -1,5 +1,5 @@
 import pygame
-from model import PlantType, ZombieType
+from model import PlantType, ZombieType, Plant
 
 class GameView:
     """Handles all game rendering using pygame."""
@@ -178,7 +178,7 @@ class GameView:
         if self.font_small is None:
             return
         
-        cost = self.model.plants[0].__class__.COSTS[plant_type]
+        cost = Plant.COSTS[plant_type]
         can_afford = self.model.sun_count >= cost
         color = self.BUTTON_COLOR if can_afford else self.BUTTON_DISABLED_COLOR
         
